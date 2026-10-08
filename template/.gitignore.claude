@@ -1,0 +1,3 @@
+# プロジェクトの .gitignore に追記する
+.claude/settings.local.json
+.claude/worktrees/
