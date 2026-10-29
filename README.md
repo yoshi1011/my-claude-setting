@@ -11,6 +11,8 @@ template/
 ├── .gitignore.claude         # プロジェクトの .gitignore に追記する内容
 └── .claude/
     ├── settings.json         # 権限設定 + メインエージェントを orchestrator にする
+    ├── commands/
+    │   └── spec.md                # /spec <テーマ> で spec-interview を開始する
     ├── agents/
     │   ├── orchestrator.md        # 司令塔。設計・判断・委譲のみ（ファイル編集しない）
     │   ├── implementer.md         # 実装担当。ファイル編集はすべてここ
@@ -18,10 +20,12 @@ template/
     │   ├── overview-checker.md    # 他機能・サービス全体への影響の検査
     │   ├── test-checker.md        # テストコードの有用性の検査
     │   ├── backend-reviewer.md    # backend の専門家レビュー
-    │   └── frontend-reviewer.md   # frontend の専門家レビュー
+    │   ├── frontend-reviewer.md   # frontend の専門家レビュー
+    │   └── spec-reviewer.md       # docs/spec.md を第三者視点でレビュー（spec-interview の Phase 7）
     └── skills/
         ├── backend-architecture/  # backend 設計指針（テンプレート。TODO を書き換える）
         ├── frontend-design/       # frontend 設計指針（テンプレート。TODO を書き換える）
+        ├── spec-interview/        # 実装前の要件ヒアリング（チェックリスト方式で docs/spec.md を作る）
         └── test-guidelines/       # 言語非依存のテスト記述ガイドライン
 ```
 
@@ -38,9 +42,10 @@ cat .gitignore.claude >> .gitignore && rm .gitignore.claude
 コピー後に以下を書き換えます。
 
 1. `CLAUDE.md` の TODO（要件資料の場所・テストの実行コマンド）
-2. `.claude/skills/backend-architecture/SKILL.md` / `frontend-design/SKILL.md` の TODO（技術スタック・トークン名・ディレクトリ構成など）
-3. backend / frontend のディレクトリ名が `backend/` / `frontend/` でない場合は、`CLAUDE.md` と各 reviewer の description を書き換える
-4. 不要な役割（例: frontend の無いプロジェクトの `frontend-reviewer`）は削除する
+2. `.claude/skills/spec-interview/config.md` の TODO（Obsidian の Vault パス。使わなければ空のまま）
+3. `.claude/skills/backend-architecture/SKILL.md` / `frontend-design/SKILL.md` の TODO（技術スタック・トークン名・ディレクトリ構成など）
+4. backend / frontend のディレクトリ名が `backend/` / `frontend/` でない場合は、`CLAUDE.md` と各 reviewer の description を書き換える
+5. 不要な役割（例: frontend の無いプロジェクトの `frontend-reviewer`）は削除する
 
 プロジェクト固有の起動・停止（`/start` `/stop` `/setup` `/seed` など）は、必要に応じてプロジェクト側でスキルを追加してください。
 
@@ -65,6 +70,12 @@ cat .gitignore.claude >> .gitignore && rm .gitignore.claude
    │ 作業依頼
    ▼
 orchestrator ── PROGRESS.md を読み、状態と残作業を確認
+   │
+   │ ⓪ 仕様ヒアリング（要件が曖昧な依頼・機能追加の相談のとき）
+   ├─  orchestrator        : spec-interview スキルで指示者にヒアリング・提案
+   ├─▶ implementer         : 合意した項目を docs/spec.md に反映
+   ├─▶ spec-reviewer       : docs/spec.md を第三者視点でレビュー
+   │     ⏸ 停止 ─ 各フェーズの終わりと仕様確定時に指示者の合意を待つ
    │
    │ ① 仕様の確定
    ├─▶ requirement-checker : 要求・実装予定を事前チェックし、要求メモを作る
@@ -111,6 +122,7 @@ orchestrator ── PROGRESS.md を読み、状態と残作業を確認
 
 | 区分 | タイミング | 指示者に求められること |
 | --- | --- | --- |
+| ⏸ 必ず | ⓪ 仕様ヒアリング（行う場合） | 各フェーズの終わりに合意し、最後に `docs/spec.md` 全体を確定する |
 | ⏸ 必ず | ② テストを書く前 | 仕様書の変更点とテストケース一覧が要求を満たしているかを確認し、了承する |
 | ⏸ 必ず | 作業の最後 | 完了報告を確認し、次の Step に進むか・コミットするかなどを判断する |
 | ⚠ 条件付き | ① 事前チェック | 要求や仕様書の誤り・不足について、どうするかを決める |
