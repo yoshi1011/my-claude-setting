@@ -14,8 +14,7 @@ template/
     ├── commands/
     │   └── spec.md                # /spec <テーマ> で spec-interview を開始する
     ├── agents/
-    │   ├── orchestrator.md        # 司令塔。設計・判断・委譲のみ（ファイル編集しない）
-    │   ├── implementer.md         # 実装担当。ファイル編集はすべてここ
+    │   ├── orchestrator.md        # 司令塔。設計・判断・実装を行い、チェック・レビューを専門エージェントに任せる
     │   ├── requirement-checker.md # 要求を満たしているかの検査（実装前後）
     │   ├── overview-checker.md    # 他機能・サービス全体への影響の検査
     │   ├── test-checker.md        # テストコードの有用性の検査
@@ -58,7 +57,7 @@ cat .gitignore.claude >> .gitignore && rm .gitignore.claude
 
 ## エージェントの動きの流れ
 
-`settings.json` の `"agent": "orchestrator"` により、セッションのメインエージェントは orchestrator になります。orchestrator はファイルを編集できないため、編集はすべて implementer に委譲します。
+`settings.json` の `"agent": "orchestrator"` により、セッションのメインエージェントは orchestrator になります。orchestrator は仕様書・テスト・実装・PROGRESS.md の編集を自身で行い、チェックとレビューを専門のサブエージェントに任せます。
 
 図の中の印の意味は次のとおりです。
 
@@ -72,29 +71,28 @@ cat .gitignore.claude >> .gitignore && rm .gitignore.claude
 orchestrator ── PROGRESS.md を読み、状態と残作業を確認
    │
    │ ⓪ 仕様ヒアリング（要件が曖昧な依頼・機能追加の相談のとき）
-   ├─  orchestrator        : spec-interview スキルで指示者にヒアリング・提案
-   ├─▶ implementer         : 合意した項目を docs/spec.md に反映
+   ├─  orchestrator        : spec-interview スキルで指示者にヒアリング・提案し、合意した項目を docs/spec.md に反映
    ├─▶ spec-reviewer       : docs/spec.md を第三者視点でレビュー
    │     ⏸ 停止 ─ 各フェーズの終わりと仕様確定時に指示者の合意を待つ
    │
    │ ① 仕様の確定
    ├─▶ requirement-checker : 要求・実装予定を事前チェックし、要求メモを作る
    │     ⚠ 停止 ─ 要求や仕様書に誤り・不足・詰めるべき点が見つかった
-   ├─▶ implementer         : 仕様書（docs）に今回の仕様を反映
+   ├─  orchestrator        : 仕様書（docs）に今回の仕様を反映
    │
    │ ② テスト先行
 ━━━┿━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  ⏸ 停止  仕様書の変更点 + テストケース一覧を提示し、了承を待つ
          （指摘があれば直して再提示 → 了承されるまで先へ進まない）
 ━━━┿━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   ├─▶ implementer         : テストだけを書く（本体コードは触らない）
+   ├─  orchestrator        : テストだけを書く（本体コードは触らない）
    │     ⚠ 停止 ─ 了承済みの一覧から外れるテストの追加・削除、既存テストの変更が必要になった
    ├─  orchestrator        : 全テストを実行し、狙いどおり失敗することを確認
    │     ⚠ 停止 ─ 狙い以外のテストが失敗した
    ├─▶ test-checker        : テスト内容を確認（実装前は 1 回まで）
    │
    │ ③ 実装（Step ごとに繰り返す）
-   ├─▶ implementer ×最大3 : 実装（設計指針スキルを参照）
+   ├─  orchestrator        : 実装（設計指針スキルを参照）
    ├─  orchestrator        : 全テストを実行し、全件成功を確認
    │     ⚠ 停止 ─ 狙い以外の失敗がある / テストと仕様・要件の食い違いに気づいた
    │
@@ -110,7 +108,7 @@ orchestrator ── PROGRESS.md を読み、状態と残作業を確認
    │     ⚠ 停止 ─ ④⑤ のチェッカー・レビュアーが「ユーザーに確認したい点」を出した
    │
    │ ⑥ 進捗の記録
-   ├─▶ implementer         : PROGRESS.md を更新
+   ├─  orchestrator        : PROGRESS.md を更新
    │
 ━━━┷━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  ⏸ 停止  指示者へ完了報告
