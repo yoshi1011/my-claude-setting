@@ -24,6 +24,7 @@ template/
     └── skills/
         ├── backend-architecture/  # backend 設計指針（テンプレート。TODO を書き換える）
         ├── frontend-design/       # frontend 設計指針（テンプレート。TODO を書き換える）
+        ├── request-interview/     # 依頼者（非エンジニア）向けの要求ヒアリング（docs/requests/ に要求ドキュメントを作る）
         ├── spec-interview/        # 実装前の要件ヒアリング（チェックリスト方式で docs/spec.md を作る）
         └── test-guidelines/       # 言語非依存のテスト記述ガイドライン
 ```
@@ -42,9 +43,10 @@ cat .gitignore.claude >> .gitignore && rm .gitignore.claude
 
 1. `CLAUDE.md` の TODO（要件資料の場所・テストの実行コマンド）
 2. `.claude/skills/spec-interview/config.md` の TODO（Obsidian の Vault パス。使わなければ空のまま）
-3. `.claude/skills/backend-architecture/SKILL.md` / `frontend-design/SKILL.md` の TODO（技術スタック・トークン名・ディレクトリ構成など）
-4. backend / frontend のディレクトリ名が `backend/` / `frontend/` でない場合は、`CLAUDE.md` と各 reviewer の description を書き換える
-5. 不要な役割（例: frontend の無いプロジェクトの `frontend-reviewer`）は削除する
+3. `.claude/skills/request-interview/config.md` の確認先・規約の URL・Notion の記録先（空欄のままでも動く）
+4. `.claude/skills/backend-architecture/SKILL.md` / `frontend-design/SKILL.md` の TODO（技術スタック・トークン名・ディレクトリ構成など）
+5. backend / frontend のディレクトリ名が `backend/` / `frontend/` でない場合は、`CLAUDE.md` と各 reviewer の description を書き換える
+6. 不要な役割（例: frontend の無いプロジェクトの `frontend-reviewer`）は削除する
 
 プロジェクト固有の起動・停止（`/start` `/stop` `/setup` `/seed` など）は、必要に応じてプロジェクト側でスキルを追加してください。
 
@@ -54,6 +56,14 @@ cat .gitignore.claude >> .gitignore && rm .gitignore.claude
 
 - **ユーザー設定（`~/.claude/agents/`, `~/.claude/skills/`）**: 置くと全プロジェクトで使えます。ただし全プロジェクトに効いてしまうため、orchestrator 体制のようにプロジェクトごとに使うか選びたい設定には向きません。
 - **プラグイン**: agents / skills / hooks をまとめて配布し、`/plugin` コマンドでプロジェクトごとにインストール・更新できます。更新を各プロジェクトに反映しやすくなります。ただしプロジェクト固有の内容（CLAUDE.md、設計指針の中身）はプロジェクト側に書く必要があります。
+
+## 要求ヒアリングから仕様設計への引き継ぎ
+
+エンジニアに開発を依頼する側の人（ユーザーサポート・PO・デザイナーなど）は、`request-interview` スキルで要望をまとめます。仕様には踏み込まず、依頼者にしか答えられないこと（困りごと・現場の事実・成功の状態・優先度・期限）と、確認漏れ（利用規約・個人情報・告知など）だけを聞きます。
+
+- 出力：`docs/requests/YYYY-MM-DD-<短い名前>.md`（正本）と、Notion 貼り付け用の `.notion.md`
+- 画面のアイデアがあれば、任意で Claude の Design アーティファクトに画面ラフを作れます
+- エンジニアは要求ドキュメント（`status: ready`）を spec-interview に渡すと、Phase 1 が要約の確認だけになり、骨組みの初期値に要求ドキュメントの内容が使われます（`spec-interview/references/request-handoff.md`）
 
 ## エージェントの動きの流れ
 
