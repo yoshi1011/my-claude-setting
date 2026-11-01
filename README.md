@@ -57,6 +57,17 @@ cat .gitignore.claude >> .gitignore && rm .gitignore.claude
 - **ユーザー設定（`~/.claude/agents/`, `~/.claude/skills/`）**: 置くと全プロジェクトで使えます。ただし全プロジェクトに効いてしまうため、orchestrator 体制のようにプロジェクトごとに使うか選びたい設定には向きません。
 - **プラグイン**: agents / skills / hooks をまとめて配布し、`/plugin` コマンドでプロジェクトごとにインストール・更新できます。更新を各プロジェクトに反映しやすくなります。ただしプロジェクト固有の内容（CLAUDE.md、設計指針の中身）はプロジェクト側に書く必要があります。
 
+### Claude Desktop / claude.ai へのインポート
+
+`template/.claude/skills/` 配下の各スキルを、Claude Desktop や claude.ai の「スキルをアップロード」から取り込める `.skill` ファイル（スキル名のフォルダを格納した zip）に変換したものを `dist/skills/` に置いています。スキルを編集したら次のコマンドで作り直してください。
+
+```bash
+python3 scripts/package_skills.py
+```
+
+- 元のスキルファイルは変更しません。
+- `disable-model-invocation` など Claude Code 固有の frontmatter キーは、パッケージ内の SKILL.md からのみ取り除きます（アップロード時のエラーを避けるため）。
+
 ## 要求ヒアリングから仕様設計への引き継ぎ
 
 エンジニアに開発を依頼する側の人（ユーザーサポート・PO・デザイナーなど）は、`request-interview` スキルで要望をまとめます。仕様には踏み込まず、依頼者にしか答えられないこと（困りごと・現場の事実・成功の状態・優先度・期限）と、確認漏れ（利用規約・個人情報・告知など）だけを聞きます。
