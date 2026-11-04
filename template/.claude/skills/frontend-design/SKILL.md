@@ -11,6 +11,7 @@ disable-model-invocation: false
   - 下記の各節の「TODO」をプロジェクトの実態に置き換える
   - 不要な節は削除してよい
   - 書き終えたら description もプロジェクト固有のキーワード（トークンのクラス名・ライブラリ名など）を含めて具体化すると、自動参照されやすくなる
+  - 書き終えたら、.claude/settings.json の permissions.deny から "Agent(frontend-reviewer)" を消すと、レビュアーが起動するようになる
 -->
 
 ## 技術スタック
