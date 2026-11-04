@@ -7,6 +7,9 @@
       "WebSearch"
     ],
     "deny": [
+      "Agent(backend-reviewer)",
+      "Agent(frontend-reviewer)",
+      "Agent(terraform-infra-reviewer)",
       "Bash(sudo:*)",
       "Bash(git push --force*)",
       "Bash(git reset --hard*)",
@@ -37,5 +40,17 @@
       "Bash(chmod:*)"
     ]
   },
-  "agent": "orchestrator"
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/block-orchestrator-subagent.sh\""
+          }
+        ]
+      }
+    ]
+  }
 }

@@ -10,20 +10,26 @@ template/
 ├── CLAUDE.md                 # プロジェクト指示のテンプレート（TODO を書き換える）
 ├── .gitignore.claude         # プロジェクトの .gitignore に追記する内容
 └── .claude/
-    ├── settings.json         # 権限設定 + メインエージェントを orchestrator にする
+    ├── settings.json         # 権限設定、レビュアーの ON/OFF、orchestrator をサブエージェントとして呼ばせない hook の登録
+    ├── hooks/
+    │   └── block-orchestrator-subagent.sh # orchestrator をサブエージェントとして起動しようとしたら拒否する
     ├── commands/
     │   └── spec.md                # /spec <テーマ> で spec-interview を開始する
     ├── agents/
-    │   ├── orchestrator.md        # 司令塔。設計・判断・実装を行い、チェック・レビューを専門エージェントに任せる
-    │   ├── requirement-checker.md # 要求を満たしているかの検査（実装前後）
-    │   ├── overview-checker.md    # 他機能・サービス全体への影響の検査
+    │   ├── orchestrator.md        # 司令塔。設計・判断・実装を行い、チェック・レビューを専門エージェントに任せる（メイン専用）
+    │   ├── requirement-checker.md # 要求を満たしているかの検査
+    │   ├── overview-checker.md    # 他機能・サービス全体への影響、既存の仕組みとの重複の検査
     │   ├── test-checker.md        # テストコードの有用性の検査
-    │   ├── backend-reviewer.md    # backend の専門家レビュー
-    │   ├── frontend-reviewer.md   # frontend の専門家レビュー
+    │   ├── failure-pattern-checker.md # 起こりうるエラー・失敗のパターンの検証
+    │   ├── security-checker.md    # 起こりうるセキュリティの問題の検証
+    │   ├── backend-reviewer.md    # backend の専門家レビュー（初期状態は OFF）
+    │   ├── frontend-reviewer.md   # frontend の専門家レビュー（初期状態は OFF）
+    │   ├── terraform-infra-reviewer.md # Terraform インフラの専門家レビュー（初期状態は OFF）
     │   └── spec-reviewer.md       # docs/spec.md を第三者視点でレビュー（spec-interview の Phase 7）
     └── skills/
         ├── backend-architecture/  # backend 設計指針（テンプレート。TODO を書き換える）
         ├── frontend-design/       # frontend 設計指針（テンプレート。TODO を書き換える）
+        ├── infra-architecture/    # Terraform インフラ設計指針（テンプレート。TODO を書き換える）
         ├── request-interview/     # 依頼者（非エンジニア）向けの要求ヒアリング（docs/requests/ に要求ドキュメントを作る）
         ├── spec-interview/        # 実装前の要件ヒアリング（チェックリスト方式で docs/spec.md を作る）
         └── test-guidelines/       # 言語非依存のテスト記述ガイドライン
@@ -42,13 +48,43 @@ cat .gitignore.claude >> .gitignore && rm .gitignore.claude
 コピー後に以下を書き換えます。
 
 1. `CLAUDE.md` の TODO（要件資料の場所・テストの実行コマンド）
-2. `.claude/skills/spec-interview/config.md` の TODO（Obsidian の Vault パス。使わなければ空のまま）
+2. `.claude/skills/spec-interview/config.md`（Obsidian にプロフィールを蓄積する場合だけ、「使う」を ON にして Vault パスを書く。初期値は OFF）
 3. `.claude/skills/request-interview/config.md` の確認先・規約の URL・Notion の記録先（空欄のままでも動く）
-4. `.claude/skills/backend-architecture/SKILL.md` / `frontend-design/SKILL.md` の TODO（技術スタック・トークン名・ディレクトリ構成など）
-5. backend / frontend のディレクトリ名が `backend/` / `frontend/` でない場合は、`CLAUDE.md` と各 reviewer の description を書き換える
-6. 不要な役割（例: frontend の無いプロジェクトの `frontend-reviewer`）は削除する
+4. `.claude/skills/backend-architecture/SKILL.md` / `frontend-design/SKILL.md` / `infra-architecture/SKILL.md` の TODO（技術スタック・トークン名・ディレクトリ構成・層構成など）
+5. 設計指針スキルを書き終えたものから、対応するレビュアーを ON にする（下の「レビュアーの ON/OFF」）
+6. backend / frontend / infra のディレクトリ名が `backend/` / `frontend/` / `infra/` でない場合は、`CLAUDE.md` と各 reviewer の description を書き換える
+7. 不要な役割（例: frontend の無いプロジェクトの `frontend-reviewer` と `frontend-design`）は削除する
 
 プロジェクト固有の起動・停止（`/start` `/stop` `/setup` `/seed` など）は、必要に応じてプロジェクト側でスキルを追加してください。
+
+### orchestrator の起動
+
+orchestrator は任意で使います。使うときは、最初から orchestrator をメインのエージェントにしてセッションを始めます。
+
+```bash
+claude --agent orchestrator
+```
+
+- 通常の `claude` で始めたセッションでは orchestrator は動かず、`CLAUDE.md` のルールに沿って通常どおり作業します。
+- orchestrator は、テストケース一覧の了承待ちなど、途中で指示者に確認しながら進める前提で作られています。そのため、他のエージェントからサブエージェントとして呼ぶことは `hooks/block-orchestrator-subagent.sh` で拒否しています。
+
+### レビュアーの ON/OFF
+
+`backend-reviewer` / `frontend-reviewer` / `terraform-infra-reviewer` は、それぞれの設計指針スキル（`backend-architecture` / `frontend-design` / `infra-architecture`）を基準にレビューします。スキルが TODO のままだと基準がないため、初期状態では `.claude/settings.json` の `permissions.deny` で起動できないようにしています（OFF）。
+
+```json
+"deny": [
+  "Agent(backend-reviewer)",
+  "Agent(frontend-reviewer)",
+  "Agent(terraform-infra-reviewer)",
+  ...
+]
+```
+
+- ON にする: スキルを書き終えたら、対応する行を `deny` から消す
+- OFF に戻す: 行を `deny` に戻す
+- OFF のレビュアーは、orchestrator も通常のセッションも起動せず、飛ばしたことを作業の報告に書きます
+- `failure-pattern-checker` / `security-checker` などのチェッカーは設計指針スキルに頼らないため、初期状態から ON です
 
 ### 補足: 公式の配布手段
 
@@ -78,7 +114,9 @@ python3 scripts/package_skills.py
 
 ## エージェントの動きの流れ
 
-`settings.json` の `"agent": "orchestrator"` により、セッションのメインエージェントは orchestrator になります。orchestrator は仕様書・テスト・実装・PROGRESS.md の編集を自身で行い、チェックとレビューを専門のサブエージェントに任せます。
+`claude --agent orchestrator` で始めたセッションでの流れです。orchestrator は仕様書・テスト・実装・PROGRESS.md の編集を自身で行い、チェックとレビューを専門のサブエージェントに任せます。
+
+チェッカー・レビュアーには、実装者の説明に引きずられずに確認してもらうため、実装の説明や意図は渡さず、差分の範囲・仕様書のパス・PROGRESS.md の該当する節（test-checker には了承済みのテストケース一覧）だけを渡します。
 
 図の中の印の意味は次のとおりです。
 
@@ -97,8 +135,6 @@ orchestrator ── PROGRESS.md を読み、状態と残作業を確認
    │     ⏸ 停止 ─ 各フェーズの終わりと仕様確定時に指示者の合意を待つ
    │
    │ ① 仕様の確定
-   ├─▶ requirement-checker : 要求・実装予定を事前チェックし、要求メモを作る
-   │     ⚠ 停止 ─ 要求や仕様書に誤り・不足・詰めるべき点が見つかった
    ├─  orchestrator        : 仕様書（docs）に今回の仕様を反映
    │
    │ ② テスト先行
@@ -117,16 +153,20 @@ orchestrator ── PROGRESS.md を読み、状態と残作業を確認
    ├─  orchestrator        : 全テストを実行し、全件成功を確認
    │     ⚠ 停止 ─ 狙い以外の失敗がある / テストと仕様・要件の食い違いに気づいた
    │
-   │ ④ 実装後のチェック
-   ├─▶ test-checker        : 追加・変更したテストを確認
-   ├─▶ overview-checker    : 他機能・サービス全体への影響を確認
+   │ ④ 実装後のチェック（3 つを並列）
+   ├─▶ test-checker        : 了承済みのテストケース一覧どおりにテストが書かれているかを確認
+   ├─▶ overview-checker    : 他機能・サービス全体への影響、既存の仕組みとの重複を確認
    │     ⚠ 停止 ─ 仕様が大きく変わる修正や、指示者の指示に反する修正が必要になった
-   ├─▶ requirement-checker : 当初の要求を満たしているか照合
+   ├─▶ requirement-checker : 仕様書・PROGRESS.md の決定事項から要求の一覧を作り、満たしているか照合
    │
-   │ ⑤ レビュー（backend / frontend 両方なら並列）
-   ├─▶ backend-reviewer    : backend-architecture スキルに沿ってレビュー
-   ├─▶ frontend-reviewer   : frontend-design スキルに沿ってレビュー
+   │ ⑤ レビュー（変更した範囲のレビュアーと 2 つのチェッカーを並列。OFF のレビュアーは飛ばす）
+   ├─▶ backend-reviewer         : backend-architecture スキルに沿ってレビュー
+   ├─▶ frontend-reviewer        : frontend-design スキルに沿ってレビュー
+   ├─▶ terraform-infra-reviewer : infra-architecture スキルに沿ってレビュー
+   ├─▶ failure-pattern-checker  : 起こりうるエラー・失敗のパターンを検証
+   ├─▶ security-checker         : 起こりうるセキュリティの問題を検証
    │     ⚠ 停止 ─ ④⑤ のチェッカー・レビュアーが「ユーザーに確認したい点」を出した
+   │     ⚠ 停止 ─ インフラの指摘を直す前（費用への影響を示し、直すものを選んでもらう）
    │
    │ ⑥ 進捗の記録
    ├─  orchestrator        : PROGRESS.md を更新
@@ -144,11 +184,12 @@ orchestrator ── PROGRESS.md を読み、状態と残作業を確認
 | ⏸ 必ず | ⓪ 仕様ヒアリング（行う場合） | 各フェーズの終わりに合意し、最後に `docs/spec.md` 全体を確定する |
 | ⏸ 必ず | ② テストを書く前 | 仕様書の変更点とテストケース一覧が要求を満たしているかを確認し、了承する |
 | ⏸ 必ず | 作業の最後 | 完了報告を確認し、次の Step に進むか・コミットするかなどを判断する |
-| ⚠ 条件付き | ① 事前チェック | 要求や仕様書の誤り・不足について、どうするかを決める |
 | ⚠ 条件付き | ② テスト作成中 | 了承済みの一覧から外れるテストの追加・削除や、既存テストの変更を認めるか判断する |
 | ⚠ 条件付き | ②③ テスト実行時 | 狙い以外のテストの失敗や、テストと仕様・要件の食い違いへの対応を決める |
 | ⚠ 条件付き | ④ overview-checker | 仕様が大きく変わる修正や、指示に反する修正を行うか判断する |
 | ⚠ 条件付き | ④⑤ チェック・レビュー | チェッカー・レビュアーからの「ユーザーに確認したい点」に回答する |
+| ⚠ 条件付き | ⑤ インフラの指摘 | 指摘ごとの「問題・修正前・修正後・費用への影響」を見て、直すものを選ぶ |
+| ⚠ 条件付き | 作業の報告 | レビュアーからの「規約への追記の提案」を、設計指針スキルに反映するか判断する |
 
 これ以外の場面でも、orchestrator はチェックの結果と修正方針を都度表示します。止まらずに進みますが、内容が違っていれば途中で指示を出して軌道修正できます。
 
@@ -159,4 +200,5 @@ orchestrator ── PROGRESS.md を読み、状態と残作業を確認
 - **ループの上限**: チェック → 修正 のループは 1 セッション最大 3 回（実装前のテスト確認は 1 回）。
 - **範囲を広げない**: Step で決めた範囲を超える修正は、致命的なもの以外は今後のタスク候補としてメモに留めます。
 - **レビュアーはコミットしない**: reviewer / checker は読み取りと指摘のみで、コード修正・コミットは行いません。
-- **知見の蓄積**: backend-reviewer / frontend-reviewer は `memory: project` により、レビューで得た知見を `.claude/agent-memory/` に蓄積し、次回以降のレビューに活かします。
+- **知見の蓄積**: backend-reviewer / frontend-reviewer / terraform-infra-reviewer は `memory: project` により、レビューで得た知見をリポジトリ直下の `.claude/agent-memory/` に蓄積し、次回以降のレビューに活かします。機能をまたいで通用する規約は「規約への追記の提案」として出し、指示者の了承を得て設計指針スキルに反映します。
+- **apply はしない**: インフラの `terraform apply` / `destroy` は指示者が行います。エージェントは実行しません。
