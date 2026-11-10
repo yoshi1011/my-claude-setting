@@ -109,7 +109,7 @@ python3 scripts/package_skills.py
 エンジニアに開発を依頼する側の人（ユーザーサポート・PO・デザイナーなど）は、`request-interview` スキルで要望をまとめます。仕様には踏み込まず、依頼者にしか答えられないこと（困りごと・現場の事実・成功の状態・優先度・期限）と、確認漏れ（利用規約・個人情報・告知など）だけを聞きます。
 
 - 出力：`docs/requests/YYYY-MM-DD-<短い名前>.md`（正本）と、Notion 貼り付け用の `.notion.md`
-- 画面のアイデアがあれば、任意で Claude の Design アーティファクトに画面ラフを作れます
+- ヒアリングがひと通り終わったら、依頼者に確認したうえで Claude の Design アーティファクトに画面デザインを作ります。リポジトリに対する要求では、既存の実装から対象の画面を再現し、その横に追加実装案を並べます。デザイン用の Artifact の URL が `docs/design.md` その他開発ルールをまとめた資料等に記録されていればその Artifact に新しいページを作り、なければ新しく作ります。作ったデザインの URL は要求ドキュメント（`design_url`）に載ります
 - エンジニアは要求ドキュメント（`status: ready`）を spec-interview に渡すと、Phase 1 が要約の確認だけになり、骨組みの初期値に要求ドキュメントの内容が使われます（`spec-interview/references/request-handoff.md`）
 
 ## エージェントの動きの流れ
