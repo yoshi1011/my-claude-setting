@@ -35,6 +35,7 @@ Document の操作（作成・タブの追加・書き込み・読み返し）�
 - 上で見つからなければ、リポジトリ内を `claude.ai/artifact/`・`claude.ai/code/artifact/` で検索し、要求用・依頼用と書かれているもの
 - 見つかった URL は Claude Docs のツールで読み、Document であること（タブの一覧が返ること）を確かめる。Document でない・読めないときは、記録されていないものとして扱う
 - 要求用らしい Document が複数あって決められないときは、依頼者に「どちらに追加しますか？」と選んでもらう
+- 仕様書用の Document（spec-interview の記録先）には書かない。要求ドキュメントと仕様書は別々の Document にする
 
 ### 2. Document を作る・タブを足す
 
