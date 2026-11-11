@@ -1,6 +1,6 @@
 ---
 name: spec-interview
-description: Webサイト・アプリ・ツール・機能追加など「何かを作りたい」「〜を追加したい」という依頼を受けたとき、実装に入る前に項目別チェックリスト形式で要件をヒアリング・提案・確定していく。要件が曖昧な依頼、新規プロダクトの立ち上げ、既存プロダクトへの機能追加の相談では、ユーザーが「仕様設計」と明言していなくても必ずこのスキルを使うこと。request-interview スキルで作られた要求ドキュメント（Claude の Document、または docs/requests/ の md）を元に仕様を詰めるときもこのスキルを使う。ただし、エンジニアに開発を依頼する側の人（ユーザーサポート・PO など非エンジニア）が要望をまとめたいときは request-interview を使う。
+description: Webサイト・アプリ・ツール・機能追加など「何かを作りたい」「〜を追加したい」という依頼を受けたとき、実装に入る前に項目別チェックリスト形式で要件をヒアリング・提案・確定していく。要件が曖昧な依頼、新規プロダクトの立ち上げ、既存プロダクトへの機能追加の相談では、ユーザーが「仕様設計」と明言していなくても必ずこのスキルを使うこと。request-interview スキルで作られた要求ドキュメント（Claude の Document、または md ファイル）を元に仕様を詰めるときもこのスキルを使う。ただし、エンジニアに開発を依頼する側の人（ユーザーサポート・PO など非エンジニア）が要望をまとめたいときは request-interview を使う。
 ---
 
 # 仕様ヒアリング（チェックリスト方式）
@@ -91,7 +91,7 @@ description: Webサイト・アプリ・ツール・機能追加など「何か�
 2. 仕様書の記録先：`references/spec-storage.md` の手順で決める。仕様書用の Document か `docs/spec.md` があればそこに記録し、どちらもなければ Document（推奨）か md かをユーザーに聞く。Document を選ばれたら、README に今後の記録先として記載するかも聞く
 3. 追加実装の場合、Claude Design のデザインがあるか：仕様書（`docs/spec.md` または仕様書用の Document）や `docs/design.md` にリンクの記録がないか確認し、見つからなければ「このプロダクトのデザインは Claude Design で作っていますか？あればリンクを教えてください」と聞く。Claude Design は Claude 本体の Design アーティファクト（`claude.ai/artifact/...`）を指す。旧サービス（`claude.ai/design`）のリンクしかない場合は、旧サービスが 2026年12月14日に終了するため、Claude 本体へ移したかを確認する
 4. 追加実装の場合は `references/additional-development.md` を読み、以降のフェーズでは各フェーズの「追加実装の場合」の指示に従う
-5. 要求ドキュメントがあるか：ユーザーが要求ドキュメント（request-interview で作った Claude の Document の URL、または frontmatter に `type: request` がある md）を示したとき、または開発ルールをまとめた資料等に記録された要求用の Document や `docs/requests/` に、まだ仕様に取り込んでいない要求ドキュメントがあるときは、`references/request-handoff.md` を読み、以降のフェーズではその指示を上乗せする（Phase 1 は要約の確認だけに縮める）
+5. 要求ドキュメントがあるか：ユーザーが要求ドキュメント（request-interview で作った Claude の Document の URL、または frontmatter に `type: request` がある md）を示したとき、または開発ルールをまとめた資料等に記録された要求用の Document や（以前の形の）`docs/requests/` に、まだ仕様に取り込んでいない要求ドキュメントがあるときは、`references/request-handoff.md` を読み、以降のフェーズではその指示を上乗せする（Phase 1 は要約の確認だけに縮める）
 
 判定結果を記録する：
 - A：完全新規

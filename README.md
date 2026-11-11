@@ -112,7 +112,7 @@ python3 scripts/package_skills.py
 - リポジトリに対する要求で Document・画面デザインを新しく作ったときは、リポジトリには書き込まず、「今後も要求定義の結果をこの Document に追記していく場合は、本リポジトリに記録先として記載してください（担当者がいるのであれば、その方に依頼してください）。」と依頼者に伝えます
 - ヒアリングがひと通り終わったら、依頼者に確認したうえで Claude の Design アーティファクトに画面デザインを作ります。リポジトリに対する要求では、既存の実装から対象の画面を再現し、その横に追加実装案を並べます。デザイン用の Artifact の URL が `docs/design.md` その他開発ルールをまとめた資料等に記録されていればその Design のキャンバスの pages に新しいページを足し、なければ新しく作ります。作ったデザインの URL は要求ドキュメントの「画面デザイン」に載ります
 - 仕様書の記録先：リポジトリで初めての仕様ヒアリングで、仕様書用の Document も `docs/spec.md` も見つからないときは、Claude の Document（推奨）か md かを聞きます。Document を選ぶと「今後も追記する資料として README に記載しますか？」と聞き、記載するなら README に記録のルールと URL を書きます。次回以降はその Document に新しいタブを作って記録します（`spec-interview/references/spec-storage.md`）。要求ドキュメントとは別の Document を使います
-- エンジニアは要求ドキュメント（「状態」が合意済みの Document の URL、または `docs/requests/` の md）を spec-interview に渡すと、Phase 1 が要約の確認だけになり、骨組みの初期値に要求ドキュメントの内容が使われます（`spec-interview/references/request-handoff.md`）
+- エンジニアは要求ドキュメント（「状態」が合意済みの Document の URL、または依頼者から受け取った md ファイル）を spec-interview に渡すと、Phase 1 が要約の確認だけになり、骨組みの初期値に要求ドキュメントの内容が使われます（`spec-interview/references/request-handoff.md`）
 
 ## エージェントの動きの流れ
 

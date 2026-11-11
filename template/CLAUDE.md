@@ -20,7 +20,7 @@
 - 仕様書が Document のとき、サブエージェント（spec-reviewer・requirement-checker など）には、Document を md に書き出した一時ファイルのパスを渡す（Document を直接読めないため）
 - 仕様が合意されるまでテスト・実装に進まない。確定後は仕様書の項目IDと完了条件を、要求・テストケースの根拠として使う
 - 仕様のレビューは `spec-reviewer` エージェントが行う
-- `request-interview` で作られた要求ドキュメント（Claude の Document、または `docs/requests/` の `type: request` の md）があれば、それを元に仕様を詰める（spec-interview の一部の手順を省ける）
+- `request-interview` で作られた要求ドキュメント（Claude の Document、または依頼者から受け取った md ファイル）があれば、それを元に仕様を詰める（spec-interview の一部の手順を省ける）
 - 要件が明確な依頼（不具合修正、範囲がはっきりした小さな変更など）では省略してよい
 
 ## 開発ルール全般

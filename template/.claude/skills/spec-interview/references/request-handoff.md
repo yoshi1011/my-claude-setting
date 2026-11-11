@@ -10,7 +10,7 @@ request-interview スキルで作られた要求ドキュメントを受け取�
 
 | | Claude の Document（推奨の形） | md ファイル（依頼者が md を選んだとき・以前の形） |
 |---|---|---|
-| 置き場所 | Claude Docs の Document。1依頼 = 1タブ（`YYYY-MM-DD <短い名前>`） | `docs/requests/YYYY-MM-DD-<短い名前>.md` など |
+| 置き場所 | Claude Docs の Document。1依頼 = 1タブ（`YYYY-MM-DD <短い名前>`） | 依頼者から受け取ったファイル（`YYYY-MM-DD-<短い名前>.md`）。ユーザーにパスを示してもらう。以前の形として `docs/requests/` にあるものも扱う |
 | 見分け方 | 冒頭の「概要」の表の「種類」が「要求ドキュメント（request-interview）」 | frontmatter に `type: request`、または冒頭の「概要」の表の「種類」が同上 |
 | 状態 | 「概要」の表の「状態」：ヒアリング中 / 合意済み | `status: draft` / `ready`（または「概要」の表の「状態」） |
 | 対象・関係する画面 | 「概要」の表の「対象」「関係する画面」 | `target`・`related_screens` |
@@ -25,7 +25,7 @@ Phase 0 で、次のどれかに当たるときにこのモードに入る。
 
 - ユーザーが要求ドキュメントの URL（`claude.ai/artifact/...`）やパスを示したとき。URL は Claude Docs のツールで読み、Document でなければ（Design など）要求ドキュメントとしては扱わない
 - リポジトリの開発ルールをまとめた資料等に要求用の Document の URL が記録されていて、その中に「合意済み」で、まだ仕様に取り込んでいないタブがあるとき
-- `docs/requests/` に `status: ready` で、まだ仕様に取り込んでいない md があるとき
+- （以前の形）`docs/requests/` に `status: ready` で、まだ仕様に取り込んでいない md があるとき
 
 候補が複数あれば、どれを扱うかユーザーに聞く。Document が読めない（共有されていない）ときは、依頼者に Share からの共有を頼むようユーザーに伝える。
 
