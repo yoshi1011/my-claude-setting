@@ -178,7 +178,7 @@ description: ユーザーサポート・PO・プロダクトリーダー・デ�
 
 **出力**
 
-出力する前に、依頼者に「Claude の Document に書く（推奨）」か「md ファイルに出力する（ファイルで共有できて便利）」かを選んでもらう。そのうえで `references/document-output.md` の手順で出力する。以下は Document を選んだときの流れ。md のときは同じファイルの「md ファイルに出力するとき」に従う。
+出力する前に、依頼者に「Claude の Document に書く（推奨）」か「md ファイルに出力する（ファイルで共有できて便利）」かを選んでもらう。md は、Claude Code でリポジトリを開いているときはリポジトリの中に保存し、Claude のアプリのチャット（Claude Desktop・claude.ai）ではダウンロードできるファイルとして渡す。そのうえで `references/document-output.md` の手順で出力する。以下は Document を選んだときの流れ。md のときは同じファイルの「md ファイルに出力するとき」に従う。
 
 - 書く場所：リポジトリに対する要求でなければ新しい Document。リポジトリに対する要求なら、要求用の Document の URL が開発ルールをまとめた資料等に記録されていればその Document の tabs に新しいタブを足し、なければ新しい Document を作る
 - 中身は `assets/request-template.md` の構成にする。書き始めたら Document を開いて依頼者に見せる
