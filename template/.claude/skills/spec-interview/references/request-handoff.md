@@ -8,7 +8,7 @@ request-interview スキルで作られた要求ドキュメントを受け取�
 
 要求ドキュメントには2つの形がある。中身のセクション（1〜11）は同じなので、以降の手順はどちらでも同じに扱う。
 
-| | Claude の Document（今の形） | md ファイル（以前の形・Claude Docs が使えない環境） |
+| | Claude の Document（推奨の形） | md ファイル（依頼者が md を選んだとき・以前の形） |
 |---|---|---|
 | 置き場所 | Claude Docs の Document。1依頼 = 1タブ（`YYYY-MM-DD <短い名前>`） | `docs/requests/YYYY-MM-DD-<短い名前>.md` など |
 | 見分け方 | 冒頭の「概要」の表の「種類」が「要求ドキュメント（request-interview）」 | frontmatter に `type: request`、または冒頭の「概要」の表の「種類」が同上 |
