@@ -8,7 +8,7 @@
 
 <!-- TODO: 要件資料・仕様書の場所に置き換える。無ければ節ごと削除 -->
 - 要件資料: `docs/requirements/`
-- 仕様書: `docs/spec.md`（spec-interview で作成・追記するチェックリスト形式の仕様書）
+- 仕様書: `docs/spec.md`、または README に記録された仕様書用の Claude Document（spec-interview で作成・追記するチェックリスト形式の仕様書）
 - デザイン: `docs/design.md`（Claude Design のリンク）/ `docs/design-brief.md`
 - ここに記載された機能 / 振る舞いは **最低限満たさなければならない**
 - 新規機能の仕様書を書く前、および実装着手前に **必ず該当箇所を確認** すること
@@ -16,10 +16,11 @@
 ## 仕様設計（spec-interview）
 
 - 「〜を作りたい」「〜を追加したい」など要件が曖昧な依頼、新規プロダクトの立ち上げ、既存プロダクトへの機能追加の相談では、すぐ実装せず `spec-interview` スキルに従ってヒアリングから始める（`/spec <テーマ>` でも開始できる）
-- 仕様は `docs/spec.md` に項目ID付きのチェックリストで記録し、確定項目には完了条件を付ける。既に `docs/spec.md` がある場合は作り直さず追記する
-- 仕様が合意されるまでテスト・実装に進まない。確定後は `docs/spec.md` の項目IDと完了条件を、要求・テストケースの根拠として使う
+- 仕様は仕様書（`docs/spec.md` または仕様書用の Document）に項目ID付きのチェックリストで記録し、確定項目には完了条件を付ける。既に仕様書がある場合は作り直さず追記する（Document なら新しいタブを作る）。どちらもない初回は、Document（推奨）か md かを指示者に確認する
+- 仕様書が Document のとき、サブエージェント（spec-reviewer・requirement-checker など）には、Document を md に書き出した一時ファイルのパスを渡す（Document を直接読めないため）
+- 仕様が合意されるまでテスト・実装に進まない。確定後は仕様書の項目IDと完了条件を、要求・テストケースの根拠として使う
 - 仕様のレビューは `spec-reviewer` エージェントが行う
-- `docs/requests/` に `request-interview` で作られた要求ドキュメント（`type: request`）があれば、それを元に仕様を詰める（spec-interview の一部の手順を省ける）
+- `request-interview` で作られた要求ドキュメント（Claude の Document、または依頼者から受け取った md ファイル）があれば、それを元に仕様を詰める（spec-interview の一部の手順を省ける）
 - 要件が明確な依頼（不具合修正、範囲がはっきりした小さな変更など）では省略してよい
 
 ## 開発ルール全般

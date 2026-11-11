@@ -23,5 +23,5 @@
 
 ## 出力
 
-- 要求ドキュメントの置き場所（リポジトリあり）：`docs/requests/`
-- Notion の記録先：{Notion のページやデータベースの名前 / 未設定}（依頼者への案内に使う）
+- 要求ドキュメントは Claude の Document に書く。置き場所の決め方は `references/document-output.md`
+- Notion の記録先：{Notion のページやデータベースの名前 / 未設定}（Document から Notion へエクスポートするときの案内に使う）

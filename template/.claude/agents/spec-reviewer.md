@@ -8,7 +8,7 @@ tools: Read, Grep, Glob
 
 ## 読むもの
 
-- `docs/spec.md`（必須）
+- `docs/spec.md`、または呼び出し時に渡された仕様書のパス（必須）。仕様書を Claude の Document に記録しているときは、呼び出し側が Document を md に書き出したファイルのパスが渡される
 - `docs/design.md`、`docs/design-brief.md`（あれば）
 
 コードや会話の経緯は参照しません。仕様書に書かれていないことは「書かれていない」として扱ってください。
