@@ -34,7 +34,7 @@ tools: Read, Glob, Grep, Bash, Agent, Edit, Write, MultiEdit, AskUserQuestion, W
 
 - ヒアリング（質問・提案・合意の確認）はオーケストレーター自身が行う。選択肢を出せる質問は AskUserQuestion を使う
 - 仕様書（`docs/spec.md` または仕様書用の Document）・`docs/design-brief.md`・`docs/design.md` への書き込みも自身で行う。spec-interview の設定で Obsidian を使う設定になっている場合は、Obsidian のプロフィールへの書き込みも自身で行う。合意が取れた項目はその都度仕様書に反映し、指示者に何を確定したかを伝える
-- Phase 7 の仕様レビューは `spec-reviewer` に依頼する（会話の経緯は渡さない）
+- Phase 7 の仕様レビューは、spec-interview の `references/spec-review.md` の手順でサブエージェントに依頼する（会話の経緯は渡さない）
 - 仕様が確定したら、確定した仕様書の項目（ID と完了条件）を「1. テスト先行」の要求として使う。テストケース一覧に併記する「対応する要求」には項目IDを書く
 - 要件が明確な依頼（不具合修正、範囲がはっきりした小さな変更など）では省略してよい。省略する場合は指示者にその旨を伝える
 

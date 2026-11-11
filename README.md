@@ -24,8 +24,7 @@ template/
     │   ├── security-checker.md    # 起こりうるセキュリティの問題の検証
     │   ├── backend-reviewer.md    # backend の専門家レビュー（初期状態は OFF）
     │   ├── frontend-reviewer.md   # frontend の専門家レビュー（初期状態は OFF）
-    │   ├── terraform-infra-reviewer.md # Terraform インフラの専門家レビュー（初期状態は OFF）
-    │   └── spec-reviewer.md       # docs/spec.md を第三者視点でレビュー（spec-interview の Phase 7）
+    │   └── terraform-infra-reviewer.md # Terraform インフラの専門家レビュー（初期状態は OFF）
     └── skills/
         ├── backend-architecture/  # backend 設計指針（テンプレート。TODO を書き換える）
         ├── frontend-design/       # frontend 設計指針（テンプレート。TODO を書き換える）
@@ -113,6 +112,7 @@ python3 scripts/package_skills.py
 - ヒアリングがひと通り終わったら、依頼者に確認したうえで Claude の Design アーティファクトに画面デザインを作ります。リポジトリに対する要求では、既存の実装から対象の画面を再現し、その横に追加実装案を並べます。デザイン用の Artifact の URL が `docs/design.md` その他開発ルールをまとめた資料等に記録されていればその Design のキャンバスの pages に新しいページを足し、なければ新しく作ります。作ったデザインの URL は要求ドキュメントの「画面デザイン」に載ります
 - 仕様書の記録先：リポジトリで初めての仕様ヒアリングで、仕様書用の Document も `docs/spec.md` も見つからないときは、Claude の Document（推奨）か md かを聞きます。Document を選ぶと「今後も追記する資料として README に記載しますか？」と聞き、記載するなら README に記録のルールと URL を書きます。次回以降はその Document に新しいタブを作って記録します（`spec-interview/references/spec-storage.md`）。要求ドキュメントとは別の Document を使います
 - エンジニアは要求ドキュメント（「状態」が合意済みの Document の URL、または依頼者から受け取った md ファイル）を spec-interview に渡すと、Phase 1 が要約の確認だけになり、骨組みの初期値に要求ドキュメントの内容が使われます（`spec-interview/references/request-handoff.md`）
+- 仕様レビュー（Phase 7）：レビュアーの指示は spec-interview の中（`spec-interview/references/spec-review.md`）にあり、読むことしかできないサブエージェントに渡して起動します。エージェントの定義を別に入れなくても、スキルだけで動きます
 
 ## エージェントの動きの流れ
 
@@ -141,7 +141,7 @@ orchestrator ── PROGRESS.md を読み、状態と残作業を確認
    │
    │ ⓪ 仕様ヒアリング（要件が曖昧な依頼・機能追加の相談のとき）
    ├─  orchestrator        : spec-interview スキルで指示者にヒアリング・提案し、合意した項目を仕様書（Document または docs/spec.md）に反映
-   ├─▶ spec-reviewer       : docs/spec.md を第三者視点でレビュー
+   ├─▶ 仕様レビュー        : spec-interview の手順でサブエージェントが仕様書を第三者視点でレビュー
    │     ⏸ 停止 ─ 各フェーズの終わりと仕様確定時に指示者の合意を待つ
    │
    │ ① 仕様の確定
