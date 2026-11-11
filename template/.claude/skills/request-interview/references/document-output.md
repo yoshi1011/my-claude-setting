@@ -1,6 +1,6 @@
 # 要求ドキュメントの出力（Phase 7）
 
-要求ドキュメントは、基本は Claude の Artifact の **Document（Claude Docs）** に書く。1つの依頼を、Document の1タブ（ページ）にする。依頼者が選んだときは md ファイルに出力する。
+要求ドキュメントは、基本は Claude の Artifact の **Document（Claude Docs）** に書く。1つの依頼を、Document の tabs（Document の中のタブの一覧）の1タブにする。Document はキャンバスではないので、ページではなくタブで分ける。依頼者が選んだときは md ファイルに出力する。
 
 ## 0. 出力の形を選んでもらう
 
@@ -24,7 +24,7 @@ Document の操作（作成・タブの追加・書き込み・読み返し）�
 | 状況 | 書く場所 |
 |---|---|
 | リポジトリなし（何らかのリポジトリに対する要求ではない） | 新しい Document を作る |
-| リポジトリあり・要求用の Document の URL が記録されている | **その Document に新しいタブを作る** |
+| リポジトリあり・要求用の Document の URL が記録されている | **その Document の tabs に新しいタブを足す** |
 | リポジトリあり・要求用の Document の URL が記録されていない | 新しい Document を作る |
 
 **要求用の Document の URL の探し方**（リポジトリありのとき）
